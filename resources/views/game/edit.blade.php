@@ -8,101 +8,85 @@
 
     <div class="container max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <section class="grid items-start gap-8">
-            <form class="w-full mx-auto" method="POST" action="{{ route('movies.update', $movie) }}') }}">
+            <form class="w-full mx-auto" method="POST" action="{{ route('game.update', $game) }}">
                 @method('PUT')
                 @csrf
                 <div class="mb-4">
-                    <label for="titre" class="block mb-2 font-medium text-gray-900 dark:text-white">
-                        Titre</label>
-                    <input type="text" id="titre"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        name="titre"
-                        required
-                        value="{{ $movie->titre }}"
-                        />
+                    <label for="name" class="block mb-2 font-medium text-gray-900 dark:text-white">
+                        {{ __("Name") }}</label>
+                    <input type="text" id="name"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        name="name"
+                        value="{{ $game->name }}"
+                        required />
                 </div>
 
                 <div class="mb-4">
-                    <label for="genre" class="block mb-2 font-medium text-gray-900 dark:text-white">
-                        Genre</label>
-                    <select id="genre"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        name="genre"
+                    <label for="genre_id" class="block mb-2 font-medium text-gray-900 dark:text-white">
+                        {{ __("Genre") }}</label>
+                    <select id="genre_id"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        name="genre_id"
                     >
-                        <option disabled>Choose a genre</option>
-                        @foreach ($types as $genre)
-                            <option value="{{ $genre->id_genre }}" selected="{{ $genre->id_genre == $movie->id_genre ? 'selected' : '' }}">{{ ucfirst($genre->nom) }}</option>
+                        <option selected disabled>Choose a genre</option>
+                        @foreach ($genres as $genre)
+                        <option value="{{ $genre->id }}" selected="{{ $game->genre_id == $genre->id ? 'selected' : '' }}">{{ ucfirst($genre->name) }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="mb-4">
-                    <label for="distributeur" class="block mb-2 font-medium text-gray-900 dark:text-white">
-                        Distributeur</label>
-                    <select id="distributeur"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        required
-                        name="distributeur"
-                    >
-                        <option disabled>Choose a genre</option>
-                        @foreach ($distributors as $distributeur)
-                            <option value="{{ $distributeur->id_distributeur }}" selected="{{ $distributeur->id_distributeur == $movie->id_distributeur ? 'selected' : '' }}">{{ ucfirst($distributeur->nom) }} -
-                                (Telephone: {{ $distributeur->telephone }})</option>
-                        @endforeach
-                    </select>
+                    <label for="cover" class="block mb-2 font-medium text-gray-900 dark:text-white">
+                        {{ __("Cover") }}</label>
+                    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
+                        id="cover"
+                        name="cover"
+                        type="file"
+                        aria-describedby="cover_help"
+                    />
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="cover_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
                 </div>
 
                 <div class="mb-4">
-                    <label for="resum" class="block mb-2 font-medium text-gray-900 dark:text-white">
-                        Resum</label>
-                    <textarea id="resum" rows="4"
-                        name="resum"
+                    <label for="summary" class="block mb-2 font-medium text-gray-900 dark:text-white">
+                        {{ __("Summary") }}</label>
+                    <textarea id="summary" rows="4"
+                        name="summary"
                         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >{{ $movie->resum }}</textarea>
-                </div>
-                <div class="mb-4 grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="date_debut_affiche" class="block mb-2 font-medium text-gray-900 dark:text-white">
-                            Date debut affiche</label>
-                        <input type="date" id="date_debut_affiche"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            name="date_debut_affiche"
-                            value="{{ $movie->date_debut_affiche }}"
-                        />
-                    </div>
-                    <div>
-                        <label for="date_fin_affiche" class="block mb-2 font-medium text-gray-900 dark:text-white">
-                            Date fin affiche</label>
-                        <input type="date" id="date_fin_affiche"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            name="date_fin_affiche"
-                            value="{{ $movie->date_fin_affiche }}"
-                        />
-                    </div>
+                    >{{ $game->summary }}</textarea>
                 </div>
 
-                <div class="mb-4 grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="duree_minutes" class="block mb-2 font-medium text-gray-900 dark:text-white">
-                            Duree minutes</label>
-                        <input type="number" id="duree_minutes"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            name="duree_minutes"
-                            value="{{ $movie->duree_minutes }}"
-                        />
-                    </div>
-                    <div>
-                        <label for="annee_production" class="block mb-2 font-medium text-gray-900 dark:text-white">
-                            Annee production</label>
-                        <input type="number" id="annee_production"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            name="annee_production"
-                            value="{{ $movie->annee_production }}"
-                        />
-                    </div>
+                <div class="mb-4">
+                    <label for="release_date" class="block mb-2 font-medium text-gray-900 dark:text-white">
+                        {{ __("Release date") }}</label>
+                    <input type="date" id="release_date"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name="release_date"
+                        value="{{ $game->release_date }}"
+                        required />
                 </div>
 
-                <div class="mb-5">
+                <div class="mb-4">
+                    <label for="developer" class="block mb-2 font-medium text-gray-900 dark:text-white">
+                        {{ __("Developer") }}</label>
+                    <input type="string" id="developer"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name="developer"
+                        value="{{ $game->developer }}"
+                    />
+                </div>
+
+                <div class="mb-4">
+                    <label for="score" class="block mb-2 font-medium text-gray-900 dark:text-white">
+                        {{ __("Score") }}</label>
+                    <input type="number" id="score"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name="score"
+                        value="{{ $game->score }}"
+                    />
+                </div>
+
+                <div class="mb-5 text-center">
                     <button type="submit"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Update

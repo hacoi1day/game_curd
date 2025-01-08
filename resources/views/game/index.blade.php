@@ -2,10 +2,9 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Films') }}
+                {{ __('Games') }}
             </h2>
-            <a
-                href="{{ route('movies.create') }}"
+            <a href="{{ route('game.create') }}"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                 Add New
             </a>
@@ -13,75 +12,79 @@
 
     </x-slot>
 
-    <div class="container mx-auto py-8">
-        <div class="grid grid-cols-[1fr,minmax(20rem,max-content)] gap-8 items-start">
-            <div class="grid grid-cols-3 gap-6">
-                @foreach ($movies as $movie)
-                    <article class="group relative rounded-2xl overflow-hidden">
-                        @if ($movie->poster)
-                            <img src="{{ $movie->poster }}" alt=""
-                                class="w-full h-full filter group-hover:brightness-50 transition-all duration-200">
-                        @else
-                            <div
-                                class="size-full bg-gray-300 flex items-center justify-center p-6 filter group-hover:brightness-50 transition-all duration-200">
-                                <p class="text-2xl font-bold text-center">{{ $movie->titre }}</p>
-                            </div>
-                        @endif
-                        <div
-                            class="absolute rounded-2xl w-full h-2/3 -bottom-2/3 bg-white/80 backdrop-blur-md group-hover:bottom-0 transition-all duration-200 px-5 py-4 shadow-xl space-y-4">
-                            <h1 class="text-2xl font-bold leading-none">{{ $movie->titre }}</h1>
-                            @if ($movie->type)
-                                <p>{{ $movie->type->nom }}</p>
-                            @endif
-                            @if ($movie->annee_production)
-                                <p>{{ $movie->annee_production }}</p>
-                            @endif
-                            @if ($movie->distributor)
-                                <p>Distribué par : {{ $movie->distributor->nom }}</p>
-                            @endif
-                        </div>
-                        <a href="{{ route('movies.show', ['movie' => $movie]) }}" class="absolute inset-0"></a>
-                    </article>
-                @endforeach
-
-                <div class="col-span-full">
-                    {{ $movies->onEachSide(0)->links() }}
-                </div>
-            </div>
-
-            <aside class="bg-white shadow-lg rounded-2xl p-6 sticky top-8">
-                <form class="space-y-4">
-                    <div class="flex items-center gap-4">
-                        <x-secondary-button type="submit">Filtrer</x-secondary-button>
-                        @if (request()->has('types'))
-                            <a href="{{ route('movies.index') }}">Réinitialiser</a>
-                        @endif
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center gap-2 mb-2">
-                            <h2 class="text-lg font-semibold">Genre</h2>
-                            <a href="{{ route('movies.index', ['types' => $types->pluck('id_genre')->toArray()]) }}"
-                                class="text-sm">Tout sélectionner</a>
-                        </div>
-                        @foreach ($types as $type)
-                            <x-input-label>
-                                <input type="checkbox" name="types[]" value="{{ $type->id_genre }}"
-                                    @checked(in_array($type->id_genre, request()->query('types', [])))>
-                                <span class="ml-1">
-                                    {{ $type->nom }}
-                                </span>
-                            </x-input-label>
+    <div class="container max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <section class="grid items-start gap-8">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                {{ __("Name") }}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                {{ __("Genre") }}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                {{ __("Developer") }}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                {{ __("Release Date") }}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                {{ __("Score") }}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                <span class="sr-only">Edit</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($games as $game)
+                            <tr
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ ucfirst($game->name) }}
+                                </th>
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $game->genre->name }}
+                                </th>
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $game->developer }}
+                                </th>
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $game->release_date }}
+                                </th>
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $game->score }}
+                                </th>
+                                <td class="px-6 py-4 flex justify-end">
+                                    <a href="{{ route('game.show', ['game' => $game]) }}"
+                                        class="font-medium text-gray-600 dark:text-gray-500 hover:underline float-left mr-4">View</a>
+                                    <a href="{{ route('game.edit', ['game' => $game]) }}"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline float-left mr-4">Edit</a>
+                                    <form action="{{ route('game.destroy', ['game' => $game]) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="float-left font-medium text-red-600 dark:text-red-500 hover:underline">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
                         @endforeach
-                    </div>
-        </div>
-        <div class="flex items-center gap-4">
-            <x-secondary-button type="submit">Filtrer</x-secondary-button>
-            @if (request()->has('types'))
-                <a href="{{ route('movies.index') }}">Réinitialiser</a>
-            @endif
-        </div>
-        </form>
-        </aside>
+                    </tbody>
+                </table>
+            </div>
+            {{ $games->links() }}
+        </section>
     </div>
-    </div>
+
 </x-app-layout>

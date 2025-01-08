@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Type\CreateTypeRequest;
 use App\Http\Requests\Type\UpdateTypeRequest;
-use App\Models\Game;
-use App\Models\Movie;
 use App\Models\Genre;
 
 class GenreController extends Controller
