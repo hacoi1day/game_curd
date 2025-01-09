@@ -58,6 +58,12 @@ class GameController extends Controller
         return view('game.show', compact('game', 'genres'));
     }
 
+    public function detail(string $id)
+    {
+        $game = Game::query()->findOrFail($id);
+        return view('game.detail', compact('game'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
